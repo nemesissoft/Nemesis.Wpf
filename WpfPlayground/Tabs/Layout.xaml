@@ -1,0 +1,319 @@
+﻿<UserControl x:Class="WpfPlayground.Tabs.Layout"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:commons="clr-namespace:Nemesis.Wpf;assembly=Nemesis.Wpf"
+             xmlns:controls="clr-namespace:Nemesis.Wpf.Controls;assembly=Nemesis.Wpf"
+             xmlns:converters="clr-namespace:Nemesis.Wpf.Converters;assembly=Nemesis.Wpf"
+             xmlns:userControls="clr-namespace:WpfPlayground.UserControls"
+             xmlns:tabs="clr-namespace:WpfPlayground.Tabs"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <tabs:LayoutViewModel/>
+    </UserControl.DataContext>
+
+    <metro:MetroAnimatedSingleRowTabControl>
+        <TabItem Header="Auto target">
+            <StackPanel>
+                <WrapPanel Orientation="Horizontal" Background="Bisque" >
+                    <Label Content="_Age(auto target on Alt+)" Target="{Binding RelativeSource={RelativeSource AncestorType=WrapPanel},Path=Children[1]}" />
+                    <TextBox Name="Age" Width="100"/>
+                    <Button Content="{commons:AccessText _Login}"/>
+                </WrapPanel>
+                <Separator Margin="0 10"/>
+
+                <Grid controls:GridUtils.ColumnDefinitions="Auto,*"
+                      controls:GridUtils.RowDefinitions="Auto,Auto,Auto"
+                      controls:GridUtils.AutoTargetForLabels="True"
+                >
+                    <Label Content="_Username:" Grid.Column="0" Grid.Row="0" />
+                    <TextBox Text="(username)" Grid.Column="1" Grid.Row="0" />
+
+                    <Label Content="_Password:" Grid.Column="0" Grid.Row="1" />
+                    <TextBox Text="(password)" Grid.Column="1" Grid.Row="1" />
+
+                    <Label Content="_Database:" Grid.Column="0" Grid.Row="2" />
+                    <TextBox Text="(database)" Grid.Column="1" Grid.Row="2" />
+                </Grid>
+            </StackPanel>
+        </TabItem>
+
+        <TabItem Header="Grid row names">
+            <Grid>
+                <Grid.Resources>
+                    <Style x:Key="DefaultStyle" TargetType="{x:Type FrameworkElement}">
+                        <Setter Property="Margin" Value="3"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style TargetType="Label" BasedOn="{StaticResource DefaultStyle}"/>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource DefaultStyle}"/>
+                </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" x:Name="TitleRow" />
+                    <RowDefinition Height="Auto" x:Name="LastNameRow" />
+                    <RowDefinition Height="Auto" x:Name="FirstNameRow" />
+                    <RowDefinition Height="Auto" x:Name="EmailRow" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Name="LabelColumn" Width="Auto" />
+                    <ColumnDefinition x:Name="ValueColumn" Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="{Binding ElementName=TitleRow, Converter={controls:GridDefinitionConverter}}" Content="_Title:" Target="{Binding ElementName=TitleTextBox}"
+                       Grid.Column="{Binding ElementName=LabelColumn, Converter={controls:GridDefinitionConverter}}" />
+                <Label Grid.Row="{Binding ElementName=LastNameRow, Converter={controls:GridDefinitionConverter}}" Content="_Last name:" 
+                       Grid.Column="{Binding ElementName=LabelColumn, Converter={controls:GridDefinitionConverter}}" />
+                <Label Grid.Row="{Binding ElementName=FirstNameRow, Converter={controls:GridDefinitionConverter}}" Content="_First name:" 
+                       Grid.Column="{Binding ElementName=LabelColumn, Converter={controls:GridDefinitionConverter}}" />
+                <Label Grid.Row="{Binding ElementName=EmailRow, Converter={controls:GridDefinitionConverter}}" Content="_Title:" 
+                       Grid.Column="{Binding ElementName=LabelColumn, Converter={controls:GridDefinitionConverter}}" />
+
+
+                <TextBox Grid.Row="{Binding ElementName=TitleRow, Converter={controls:GridDefinitionConverter}}" Name="TitleTextBox"
+                         Grid.Column="{Binding ElementName=ValueColumn, Converter={controls:GridDefinitionConverter}}" />
+                <TextBox Grid.Row="{Binding ElementName=LastNameRow, Converter={controls:GridDefinitionConverter}}" 
+                         Grid.Column="{Binding ElementName=ValueColumn, Converter={controls:GridDefinitionConverter}}" />
+                <TextBox Grid.Row="{Binding ElementName=FirstNameRow, Converter={controls:GridDefinitionConverter}}" 
+                         Grid.Column="{Binding ElementName=ValueColumn, Converter={controls:GridDefinitionConverter}}" />
+                <TextBox Grid.Row="{Binding ElementName=EmailRow, Converter={controls:GridDefinitionConverter}}" 
+                         Grid.Column="{Binding ElementName=ValueColumn, Converter={controls:GridDefinitionConverter}}" />
+
+            </Grid>
+        </TabItem>
+
+        <TabItem Header="Spliter grid">
+            <ItemsControl Grid.IsSharedSizeScope="True" ItemsSource="{Binding SpliterItemsSource}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition SharedSizeGroup="FirstColumn" Width="Auto" MinWidth="25"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Path=Key}" TextWrapping="Wrap"/>
+                            <GridSplitter HorizontalAlignment="Right" VerticalAlignment="Stretch" 
+                                          Grid.Column="1" ResizeBehavior="PreviousAndCurrent"
+                                          Width="5" Background="#FFBCBCBC"/>
+                            <TextBlock Text="{Binding Path=Value}" Grid.Column="2" TextWrapping="Wrap"/>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </TabItem>
+
+        <TabItem Header="Grid auto layout">
+            <DockPanel>
+                <Button Command="{Binding CycleLayoutCommand}" CommandParameter="{Binding ElementName=AutoGrid}" DockPanel.Dock="Top" MinHeight="35" Content="{Binding Path=GridAutoLayoutType}" ContentStringFormat="Cycle layouts({0})" />
+
+                <Grid controls:GridUtils.AutoLayoutType="{Binding GridAutoLayoutType}" Name="AutoGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Margin" Value="2"/>
+                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            <Setter Property="VerticalAlignment" Value="Stretch"/>
+                        </Style>
+                    </Grid.Resources>
+                    <!-- ReSharper disable Xaml.MissingGridIndex -->
+                    <Button Content="1" Grid.RowSpan="2"/>
+                    <Button Content="2" />
+                    <Button Content="3" />
+                    <Button Content="4" />
+                    <Button Content="5" />
+                    <Button Content="6" />
+                    <Button Content="7" />
+                    <Button Content="8" Grid.RowSpan="2" />
+                    <Button Content="9" />
+                    <Button Content="10" />
+                    <Button Content="11" />
+                    <Button Content="12" />
+                    <Button Content="13" />
+                    <Button Content="14" />
+                    <Button Content="15" />
+                    <Button Content="16" Grid.RowSpan="2" />
+                    <Button Content="17" />
+                    <!-- ReSharper restore Xaml.MissingGridIndex -->
+                </Grid>
+            </DockPanel>
+        </TabItem>
+
+        <TabItem Header="Grid cell definition">
+            <Grid controls:GridUtils.ColumnDefinitions="100,"
+                  controls:GridUtils.RowDefinitions="Auto,,,,,2*">
+                <Grid.Resources>
+                    <Style x:Key="DefaultStyle" TargetType="{x:Type FrameworkElement}">
+                        <Setter Property="Margin" Value="5,2"/>
+                    </Style>
+                    <Style TargetType="Label" BasedOn="{StaticResource DefaultStyle}">
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource DefaultStyle}"/>
+                </Grid.Resources>
+
+                <Label Content="User Details" FontSize="20" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
+
+                <Label Content="Forename:" Grid.Row="1"/>
+                <TextBox Text="Bruce" Grid.Column="1" Grid.Row="1"/>
+
+                <Label Content="Surname:" Grid.Row="2"/>
+                <TextBox Text="Wayne" Grid.Column="1" Grid.Row="2"/>
+
+                <Label Content="Age:" Grid.Row="3"/>
+                <TextBox Text="32" Grid.Column="1" Grid.Row="3"/>
+
+                <Label Content="Phone:" Grid.Row="4"/>
+                <TextBox Text="+1 555 555 555" Grid.Column="1" Grid.Row="4"/>
+
+                <Label Content="Notes:" Grid.Row="5"/>
+                <TextBox Text="He is vengeance. He is the night. He is the thing criminals fear. HE! IS! BATMAN!" TextWrapping="Wrap" Grid.Row="5" Grid.Column="1"/>
+            </Grid>
+        </TabItem>
+
+        <TabItem Header="AUTO Grid">
+            <Grid Name="FullAutoGrid" 
+                  controls:GridUtils.ColumnDefinitions="100,*,*,*"
+                  controls:GridUtils.RowDefinitions="Auto,,50,,,,2*"
+                  controls:GridUtils.AutoLayoutType="FillRows"
+                  >
+                <Grid.Resources>
+                    <Style x:Key="DefaultStyle" TargetType="{x:Type FrameworkElement}">
+                        <Setter Property="Margin" Value="5,2"/>
+                    </Style>
+                    <Style TargetType="Label" BasedOn="{StaticResource DefaultStyle}">
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="Background" Value="YellowGreen"/>
+                    </Style>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource DefaultStyle}"/>
+                </Grid.Resources>
+
+
+                <Label Content="User Details" FontSize="15" HorizontalAlignment="Center" />
+
+                <Label Content="First" FontSize="15" HorizontalAlignment="Left" controls:GridUtils.AutoLayoutOptions="DoNotAdvance" />
+                <Label Content="column" FontSize="15" HorizontalAlignment="Right" controls:GridUtils.AutoLayoutOptions="Skip1" />
+
+                <Label Content="Last" FontSize="15" HorizontalAlignment="Left" controls:GridUtils.AutoLayoutOptions="DoNotAdvance" />
+                <Label Content="column" FontSize="15" HorizontalAlignment="Right" />
+
+
+                <Label Content="Forename:" />
+                <TextBox Text="Bruce" Grid.ColumnSpan="2" controls:GridUtils.AutoLayoutOptions="Skip6" />
+
+                <Label Content="Surname:" />
+                <TextBox Text="Wayne" controls:GridUtils.AutoLayoutOptions="Skip1" />
+
+                <Label Content="Age:" />
+                <TextBox Text="32" Grid.ColumnSpan="3" />
+
+                <Label Content="Phone:" controls:GridUtils.AutoLayoutOptions="Skip2" />
+                <TextBox Text="+1 555 555 555" />
+
+                <Label Content="Notes:" />
+                <TextBox Text="He is vengeance. He is the night. He is the thing criminals fear. HE! IS! BATMAN!" TextWrapping="Wrap" controls:GridUtils.AutoLayoutOptions="Skip1"  />
+
+                <Canvas VerticalAlignment="Center" HorizontalAlignment="Center" Width="200" Height="100">
+                    <Ellipse Fill="Gold" Stroke="Black" Width="200" Height="100" StrokeThickness="3" />
+                    <Path Stretch="Uniform" SnapsToDevicePixels="True" Fill="#FF111010" Stroke="Yellow" StrokeThickness="2" Width="200" Height="80"
+                          Data="{Binding Source={StaticResource PathOfBatman}}"
+                    >
+                        <Path.RenderTransform>
+                            <ScaleTransform ScaleY="-1" CenterY="45" ScaleX="1.2" CenterX="50" />
+                        </Path.RenderTransform>
+                    </Path>
+                </Canvas>
+            </Grid>
+        </TabItem>
+
+        <TabItem Header="Adaptive panel">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Numbers}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="2" Height="50">
+                                <Rectangle Fill="Silver" />
+                                <TextBlock Text="{Binding }" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+
+                    <!--<ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Grid controls:GridUtils.ColumnDefinitions="6x*" controls:GridUtils.RowDefinitions="50xAuto" controls:GridUtils.AutoLayoutType="FillRows" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>-->
+
+
+                    <ItemsControl.Style>
+                        <Style>
+                            <Setter Property="ItemsControl.ItemsPanel">
+                                <Setter.Value>
+                                    <ItemsPanelTemplate>
+                                        <Grid controls:GridUtils.ColumnDefinitions="6x*" controls:GridUtils.RowDefinitions="20xAuto" controls:GridUtils.AutoLayoutType="FillRows" />
+                                    </ItemsPanelTemplate>
+                                </Setter.Value>
+                            </Setter>
+
+                            <Style.Triggers>
+                                <DataTrigger Value="True" Binding="{Binding ActualWidth, 
+                                    RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}},
+                                    Converter={converters:IsValueLessThanParameter},ConverterParameter=600}">
+
+                                    <Setter Property="ItemsControl.ItemsPanel">
+                                        <Setter.Value>
+                                            <ItemsPanelTemplate>
+                                                <Grid controls:GridUtils.ColumnDefinitions="4x*" controls:GridUtils.RowDefinitions="20xAuto" controls:GridUtils.AutoLayoutType="FillRows" />
+                                            </ItemsPanelTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+
+                        </Style>
+                    </ItemsControl.Style>
+                </ItemsControl>
+            </ScrollViewer>
+        </TabItem>
+
+
+        <TabItem Header="Expand control">
+            <Grid controls:GridUtils.RowDefinitions="3x*" controls:GridUtils.ColumnDefinitions="3x*" controls:GridUtils.AutoLayoutType="FillRows" Name="MainGrid">
+                <Rectangle Fill="LightCoral" Grid.ColumnSpan="3" controls:GridUtils.AutoLayoutOptions="Skip1" />
+
+                <userControls:ExpandableContentControl controls:GridUtils.AutoLayoutOptions="Skip1">
+                    <Grid controls:GridUtils.ColumnDefinitions="2x*" controls:GridUtils.RowDefinitions="2x*" controls:GridUtils.AutoLayoutType="FillRows">
+                        <FrameworkElement.Resources>
+                            <Style TargetType="Rectangle">
+                                <Setter Property="Margin" Value="10"></Setter>
+                                <EventSetter Event="MouseDown" Handler="RectMouseDown" />
+                            </Style>
+                        </FrameworkElement.Resources>
+                        <Rectangle Fill="Red" />
+                        <Rectangle Fill="Green" />
+                        <Rectangle Fill="Blue" />
+                        <Rectangle Fill="Yellow" />
+                    </Grid>
+
+                </userControls:ExpandableContentControl>
+
+                <Rectangle Fill="LightCoral" Grid.ColumnSpan="3" />
+            </Grid>
+        </TabItem>
+    </metro:MetroAnimatedSingleRowTabControl>
+</UserControl>

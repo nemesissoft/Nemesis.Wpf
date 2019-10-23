@@ -6,9 +6,15 @@
     <LangVersion>8.0</LangVersion>
     <!--<AllowUnsafeBlocks>true</AllowUnsafeBlocks>-->
 
+
+    <Authors>Michał Bryłka, Leszek Kowalski</Authors>
+    <PackageLicenseExpression>MIT OR Apache-2.0</PackageLicenseExpression>
     <PackageTags>wpf binding utils grid markup valueConverters commands</PackageTags>
     <Description>Contains various WPF goodies</Description>
+    <Copyright>Copyright (c) Michał Bryłka. Icon by Good Stuff No Nonsense (http://www.iconarchive.com/artist/goodstuff-no-nonsense.html)</Copyright>
     <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
+    
+    <PackageIcon>alien-2.png</PackageIcon>
 
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageProjectUrl>https://github.com/nemesissoft/Nemesis.Wpf</PackageProjectUrl>
@@ -17,6 +23,8 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSourceRevisionInInformationalVersion>true</IncludeSourceRevisionInInformationalVersion>
+    <NoWarn>NU5105</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 
 
     <SignAssembly>true</SignAssembly>
@@ -25,6 +33,9 @@
     <AssemblyOriginatorKeyFile>..\Nemesis.Wpf.Public.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="..\alien-2.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="PresentationCore" />

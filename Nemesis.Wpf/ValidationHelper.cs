@@ -7,7 +7,6 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 
 namespace Nemesis.Wpf
@@ -65,7 +64,7 @@ namespace Nemesis.Wpf
 
     // ^(?<major>\d+)\.(?<minor>\d+)\.(?<build>\d+)\.(?<revision>\d+)$
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter)]
-    internal sealed class VersionDataAttribute : DataTypeAttribute
+    public sealed class VersionDataAttribute : DataTypeAttribute
     {
         public VersionDataAttribute() : base(DataType.Custom) { }
 

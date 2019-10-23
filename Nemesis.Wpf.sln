@@ -9,8 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nemesis.Wpf.Tests", "Nemesi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{C6F4C549-DB35-4A7C-9DE6-CC370A65AA52}"
 	ProjectSection(SolutionItems) = preProject
+		alien-2.png = alien-2.png
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfPlayground", "WpfPlayground\WpfPlayground.csproj", "{4619CA97-D3B2-4A3B-9730-A2E40F888C39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +29,10 @@ Global
 		{771D81DA-2ED6-478B-9D53-EF110CD91157}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{771D81DA-2ED6-478B-9D53-EF110CD91157}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{771D81DA-2ED6-478B-9D53-EF110CD91157}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4619CA97-D3B2-4A3B-9730-A2E40F888C39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4619CA97-D3B2-4A3B-9730-A2E40F888C39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4619CA97-D3B2-4A3B-9730-A2E40F888C39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4619CA97-D3B2-4A3B-9730-A2E40F888C39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

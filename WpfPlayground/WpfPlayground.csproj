@@ -1,0 +1,31 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras/1.6.61">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net461</TargetFramework>
+    <StartupObject>WpfPlayground.App</StartupObject>
+    <LangVersion>8.0</LangVersion>
+    <ExtrasEnableWpfProjectSetup>true</ExtrasEnableWpfProjectSetup>
+    
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro" Version="1.6.5" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="2.3.0" />
+    <PackageReference Include="WpfAnalyzers" Version="2.4.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Nemesis.Wpf\Nemesis.Wpf.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data.Entity.Design" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+
+
+</Project>

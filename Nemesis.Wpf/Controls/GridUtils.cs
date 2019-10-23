@@ -10,7 +10,7 @@ using Nemesis.Wpf.Converters;
 namespace Nemesis.Wpf.Controls
 {
     [SuppressMessage("ReSharper", "UnusedMember.Global")]
-    internal class GridUtils
+    public class GridUtils
     {
         #region Auto layout 
 
