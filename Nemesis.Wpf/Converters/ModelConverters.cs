@@ -37,78 +37,65 @@ namespace Nemesis.Wpf.Converters
     #endregion
     public class NumberToDoubleValueConverter : BaseConverter
     {
-        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value == null)
-                return Nullable.GetUnderlyingType(targetType) != null ? null : Binding.DoNothing;
-
-            switch (value)
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+            value switch
             {
-                case double d: return d;
-                case float f: return (double)f;
-                case decimal m: return (double)m;
-                case int i: return (double)i;
-                case uint ui: return (double)ui;
-                case short s: return (double)s;
-                case ushort us: return (double)us;
-                case byte b: return (double)b;
-                case sbyte sb: return (double)sb;
-                case long l: return (double)l;
-                case ulong ul: return (double)ul;
-
-                //case eDouble ed: return (double)ed;
-                default: return Binding.DoNothing;
-            }
-        }
+                null => Nullable.GetUnderlyingType(targetType) != null ? null : Binding.DoNothing,
+                double d => d,
+                float f => (double)f,
+                decimal m => (double)m,
+                int i => (double)i,
+                uint ui => (double)ui,
+                short s => (double)s,
+                ushort us => (double)us,
+                byte b => (double)b,
+                sbyte sb => (double)sb,
+                long l => (double)l,
+                ulong ul => (double)ul,
+                //eDouble ed => (double)ed,
+                _ => Binding.DoNothing
+            };
 
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (targetType == typeof(object) && parameter != null)
-                targetType = parameter is PropertyInfo pi ? pi.PropertyType : (parameter is Type t ? t : typeof(object));
-
-            if (value == null)
-                return Nullable.GetUnderlyingType(targetType) != null ? null : Binding.DoNothing;
-
-            if (value is double d)
-                switch (Type.GetTypeCode(targetType))
+            if ((targetType is null || targetType == typeof(object)) && parameter != null)
+                targetType = parameter switch
                 {
-                    case TypeCode.Double:
-                        return d;
-                    case TypeCode.Single:
-                        return (float)d;
-                    case TypeCode.Decimal:
-                        return (decimal)d;
+                    PropertyInfo pi => pi.PropertyType,
+                    FieldInfo fi => fi.FieldType,
+                    Type t => t,
+                    _ => typeof(object)
+                };
+            targetType ??= typeof(object);
 
-                    case TypeCode.Int32:
-                        return (int)d;
-                    case TypeCode.UInt32:
-                        return (uint)d;
 
-                    case TypeCode.Int16:
-                        return (short)d;
-                    case TypeCode.UInt16:
-                        return (ushort)d;
+            var typeCode = Type.GetTypeCode(Nullable.GetUnderlyingType(targetType) is { } underlyingType
+                ? underlyingType
+                : targetType
+                );
 
-                    case TypeCode.Byte:
-                        return (byte)d;
-                    case TypeCode.SByte:
-                        return (sbyte)d;
-
-                    case TypeCode.Int64:
-                        return (long)d;
-                    case TypeCode.UInt64:
-                        return (ulong)d;
-
-                    case TypeCode.Object:
-                        return
-                            //targetType == typeof(eDouble) || targetType == typeof(eDouble?) ? new eDouble(d) : 
-                            value;
-
-                    default:
-                        return Binding.DoNothing;
-                }
-            else
-                return Binding.DoNothing;
+            return value switch
+            {
+                double d => (typeCode switch
+                {
+                    TypeCode.Double => d,
+                    TypeCode.Single => (float)d,
+                    TypeCode.Decimal => (decimal)d,
+                    TypeCode.Int32 => (int)d,
+                    TypeCode.UInt32 => (uint)d,
+                    TypeCode.Int16 => (short)d,
+                    TypeCode.UInt16 => (ushort)d,
+                    TypeCode.Byte => (byte)d,
+                    TypeCode.SByte => (sbyte)d,
+                    TypeCode.Int64 => (long)d,
+                    TypeCode.UInt64 => (ulong)d,
+                    TypeCode.Object => //targetType == typeof(eDouble) || targetType == typeof(eDouble?) ? new eDouble(d) : 
+                                        value,
+                    _ => Binding.DoNothing
+                }),
+                null => (Nullable.GetUnderlyingType(targetType) != null ? null : Binding.DoNothing),
+                _ => Binding.DoNothing
+            };
         }
     }
 
